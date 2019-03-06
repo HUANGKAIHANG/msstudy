@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: licenseservice
+  profiles:
+    active:
+      default

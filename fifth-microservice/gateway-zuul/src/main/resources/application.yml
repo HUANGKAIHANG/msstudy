@@ -1,0 +1,63 @@
+#server:
+#  port: 5555
+#
+#eureka:
+#  instance:
+#    preferIpAddress: true
+#  client:
+#    serviceUrl:
+#      defaultZone: http://localhost:8761/eureka
+
+#hystrix:
+#  command:
+#    default:
+#      execution:
+#        isolation:
+#          thread:
+#            timeoutInMilliseconds: 7000
+#假如需要修改特定的服务的超时时间，比如organization服务，
+#则需要将上面的hystrix.command.defualt.换成hystrix.command.organizationservice，
+#即将default换成对应的服务名。
+#当hystrix配置超时时间超过5秒时，需要配合以下配置，可以在ribbon上面增加一级指定针对的服务
+#ribbon:
+#  ReadTimeout: 7000
+
+
+# 手动创建路由
+#zuul:
+#  routes:
+#    organizationservice: /organization/**
+
+# 针对organizationservice，只留下手动路由
+#zuul:
+#  ignored-services: 'organizationservice'
+#  routes:
+#    organizationservice: /organization/**
+
+# 忽略所有自动路由
+#zuul:
+#  ignored-services: '*'
+#  routes:
+#    organizationservice: /organization/**
+#    licenseservice: /license/**
+#  prefix: /api
+
+# 静态URLs手动映射路由
+#zuul:
+#  prefix: /api
+#  routes:
+#    organizationstatic:
+#      path: /organizationstatic/**
+#      url: http://localhost:11000
+
+# 多个静态URLs，并实现负载均衡
+#zuul:
+#  prefix: /api
+#  routes:
+#    organizationstatic:
+#      path: /organizationstatic/**
+#      serviceId: organizationstatic
+#organizationstatic:
+#  ribbon:
+#    NIWSServerListClassName: com.netflix.loadbalancer.ConfigurationBasedServerList
+#    listOfServers: http://localhost:11000,http://localhost:11001
